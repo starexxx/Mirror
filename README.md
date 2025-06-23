@@ -111,12 +111,5 @@ python cli.py
 
 Full command list available via `help` in the tool.
 
-## Contributing
-
-**Contributions are welcome! Please:**
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
 ## License & Disclaimer
 This project released under MIT License and this tool is for **educational and ethical testing purposes only**. Always obtain proper authorization before scanning or testing any network or system.
