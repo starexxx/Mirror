@@ -1,0 +1,12 @@
+requests
+python-whois
+ipwhois
+dnspython
+pyOpenSSL
+cryptography
+tldextract
+validators
+pysocks
+chardet
+idna
+certifi
