@@ -1,4 +1,4 @@
-# Starexx CLI  - Ethical Toolkit
+# Toolkit
 A pure ethical hacking utility tool with over 15+ security assessment features, designed for penetration testers, security researchers, and developers.
 
 ## Features
