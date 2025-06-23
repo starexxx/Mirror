@@ -94,7 +94,7 @@ python cli.py
    starexx@root ~$ tracklog --live
    ```
 
-## Command Reference
+### Command Reference
 
 | Command | Description |
 |---------|-------------|
