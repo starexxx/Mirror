@@ -12,7 +12,7 @@
 
 4. **Download the tool**:
    ```bash
-   git clone https://github.com/starexx/toolkit.git
+   git clone https://github.com/starexxx/toolkit.git
    cd toolkit
    ```
 3. **Run the tool**:
