@@ -15,9 +15,16 @@
    cd toolkit
    ```
 3. **Run the tool**:
-   ```sh
-   python3 cli.py # help 
-   ```
+   - ```sh
+     chmod +x cli.py
+     ```
+   - ```sh
+      ./cli.py
+     ```
+
+     Type `help` for available commands
+     
+
 
 ## License & Disclaimer
-This project released under MIT License and this tool is for **educational and ethical testing purposes only**. Always obtain proper authorization before scanning or testing any network or system.
+This project released under **MIT License** and this tool is for **educational and ethical testing purposes only**. Always obtain proper authorization before scanning or testing any network or system.
