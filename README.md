@@ -5,25 +5,25 @@
    - Required packages: `requests`, `python-whois`, `ipwhois`, `dnspython`, `pyOpenSSL`, `cryptography`
 
 2. **Install dependencies**:
-   ```sh
+   ```bash
    pip install requests python-whois ipwhois dnspython pyOpenSSL cryptography
    ```
+   or `pip install -r requirements.txt`
 
-3. **Download the tool**:
-   ```sh
+4. **Download the tool**:
+   ```bash
    git clone https://github.com/starexx/toolkit.git
    cd toolkit
    ```
 3. **Run the tool**:
-   - ```sh
+   - ```bash
      chmod +x cli.py
      ```
-   - ```sh
+   - ```bash
       ./cli.py
      ```
 
      Type `help` for available commands
-     
 
 
 ## License & Disclaimer
