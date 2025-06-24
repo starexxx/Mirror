@@ -43,15 +43,17 @@ class StarexxTracker:
     def show_banner(self):
         banner = f"""
 {Colors.OKGREEN}{Colors.BOLD}
-
-      :::::::: ::::::::::: :::     :::::::::  :::::::::: :::    ::: :::    ::: 
-    :+:    :+:    :+:   :+: :+:   :+:    :+: :+:        :+:    :+: :+:    :+:  
-   +:+           +:+  +:+   +:+  +:+    +:+ +:+         +:+  +:+   +:+  +:+    
-  +#++:++#++    +#+ +#++:++#++: +#++:++#:  +#++:++#     +#++:+     +#++:+      
-        +#+    +#+ +#+     +#+ +#+    +#+ +#+         +#+  +#+   +#+  +#+      
-#+#    #+#    #+# #+#     #+# #+#    #+# #+#        #+#    #+# #+#    #+#      
-########     ### ###     ### ###    ### ########## ###    ### ###    ###                                                                                                   
-
+      
+  ██████ ▄▄▄█████▓ ▄▄▄       ██▀███  ▓█████ ▒██   ██▒▒██   ██▒
+▒██    ▒ ▓  ██▒ ▓▒▒████▄    ▓██ ▒ ██▒▓█   ▀ ▒▒ █ █ ▒░▒▒ █ █ ▒░
+░ ▓██▄   ▒ ▓██░ ▒░▒██  ▀█▄  ▓██ ░▄█ ▒▒███   ░░  █   ░░░  █   ░
+  ▒   ██▒░ ▓██▓ ░ ░██▄▄▄▄██ ▒██▀▀█▄  ▒▓█  ▄  ░ █ █ ▒  ░ █ █ ▒ 
+▒██████▒▒  ▒██▒ ░  ▓█   ▓██▒░██▓ ▒██▒░▒████▒▒██▒ ▒██▒▒██▒ ▒██▒
+▒ ▒▓▒ ▒ ░  ▒ ░░    ▒▒   ▓▒█░░ ▒▓ ░▒▓░░░ ▒░ ░▒▒ ░ ░▓ ░▒▒ ░ ░▓ ░
+░ ░▒  ░ ░    ░      ▒   ▒▒ ░  ░▒ ░ ▒░ ░ ░  ░░░   ░▒ ░░░   ░▒ ░
+░  ░  ░    ░        ░   ▒     ░░   ░    ░    ░    ░   ░    ░  
+      ░                 ░  ░   ░        ░  ░ ░    ░   ░    ░  
+      
 {Colors.ENDC}Starexx Basic Toolkit{Colors.ENDC}
 Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
 """
@@ -112,7 +114,6 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             
             if not is_private:
                 try:
-                    # Using ip-api.com for public IP info
                     response = requests.get(f"http://ip-api.com/json/{ip}").json()
                     if response['status'] == 'success':
                         print(f"{Colors.BOLD}ISP:{Colors.ENDC} {response.get('isp', 'N/A')}")
@@ -128,7 +129,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 except Exception as e:
                     print(f"{Colors.WARNING}Could not fetch additional IP information: {str(e)}{Colors.ENDC}")
                     
-                
+                # Reverse DNS
                 try:
                     hostname = socket.gethostbyaddr(ip)[0]
                     print(f"{Colors.BOLD}Reverse DNS:{Colors.ENDC} {hostname}")
@@ -249,10 +250,10 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             print(f"{Colors.HEADER}WHOIS lookup for {target}{Colors.ENDC}")
             
             if self.validate_ip(target):
-                # IP WHOIS
+                
                 w = whois.whois(target)
             elif self.validate_domain(target):
-                # Domain WHOIS
+                
                 if not target.startswith(('http://', 'https://')):
                     target = 'http://' + target
                 parsed = urlparse(target)
@@ -370,6 +371,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             self.log_command("tracklog", False, str(e))
             print(f"{Colors.FAIL}Error: {str(e)}{Colors.ENDC}")
             
+ 
     
     def dns_lookup(self, domain, record_type='A'):
         try:
@@ -601,13 +603,13 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             allowed_methods = []
             
             try:
-                # CHECK OPTIONS which should return allowed methods
+             
                 response = requests.options(url, timeout=5)
                 if 'Allow' in response.headers:
                     allowed = response.headers['Allow'].split(', ')
                     allowed_methods.extend([m.upper() for m in allowed])
                 else:
-                    # If OPTIONS doesn't return Allow header, test each method individually
+                
                     for method in methods:
                         try:
                             if method == 'GET':
@@ -631,7 +633,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                                 requests.patch(url, timeout=2, data={'test': 'test'})
                                 allowed_methods.append(method)
                             elif method == 'TRACE':
-                                # TRACE is rarely supported and can be dangerous
+                                
                                 try:
                                     requests.request('TRACE', url, timeout=2)
                                     allowed_methods.append(method)
@@ -643,7 +645,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 if allowed_methods:
                     print(f"{Colors.OKGREEN}Allowed methods: {', '.join(allowed_methods)}{Colors.ENDC}")
                     
-                    # Warn about potentially dangerous methods
+                    
                     dangerous = set(allowed_methods) & {'PUT', 'DELETE', 'TRACE'}
                     if dangerous:
                         print(f"{Colors.WARNING}Warning: Potentially dangerous methods allowed: {', '.join(dangerous)}{Colors.ENDC}")
@@ -676,7 +678,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 response = requests.get(robots_url, timeout=5)
                 if response.status_code == 200:
                     print(response.text)
-                    # Analyze common patterns
+                    
                     lines = response.text.split('\n')
                     disallowed = [line.split('Disallow:')[1].strip() for line in lines if line.startswith('Disallow:')]
                     if disallowed:
@@ -714,7 +716,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                     'Access-Control-Request-Headers': 'X-Requested-With'
                 }
                 
-                # First check OPTIONS (preflight)
+               
                 response = requests.options(url, headers=headers, timeout=5)
                 cors_headers = {
                     'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin', 'NOT SET'),
@@ -727,11 +729,11 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 for header, value in cors_headers.items():
                     print(f"  {header}: {value}")
                     
-                # Check if wildcard is used
+               
                 if cors_headers['Access-Control-Allow-Origin'] == '*':
                     print(f"{Colors.WARNING}Warning: Access-Control-Allow-Origin is set to '*' which is insecure{Colors.ENDC}")
                     
-                # Now check actual request
+                
                 response = requests.get(url, headers={'Origin': 'https://example.com'}, timeout=5)
                 acao = response.headers.get('Access-Control-Allow-Origin', 'NOT SET')
                 acac = response.headers.get('Access-Control-Allow-Credentials', 'NOT SET')
@@ -740,7 +742,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 print(f"  Access-Control-Allow-Origin: {acao}")
                 print(f"  Access-Control-Allow-Credentials: {acac}")
                 
-                # Check for misconfigurations
+                
                 if acao == '*' and acac == 'true':
                     print(f"{Colors.FAIL}Critical: Insecure CORS configuration - Credentials with wildcard origin{Colors.ENDC}")
                 elif acao == 'https://example.com' and acac == 'true':
@@ -808,30 +810,30 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 from cryptography import x509
                 from cryptography.hazmat.backends import default_backend
                 
-                # Establish a connection to get the certificate
+                
                 cert = ssl.get_server_certificate((domain, 443))
                 x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
                 
-                # Certificate subject
+                
                 subject = x509.get_subject()
                 print(f"{Colors.BOLD}Subject:{Colors.ENDC}")
                 for k, v in subject.get_components():
                     print(f"  {k.decode()}: {v.decode()}")
                     
-                # Issuer
+                
                 issuer = x509.get_issuer()
                 print(f"\n{Colors.BOLD}Issuer:{Colors.ENDC}")
                 for k, v in issuer.get_components():
                     print(f"  {k.decode()}: {v.decode()}")
                     
-                # Validity
+              
                 not_before = x509.get_notBefore().decode('ascii')
                 not_after = x509.get_notAfter().decode('ascii')
                 print(f"\n{Colors.BOLD}Validity:{Colors.ENDC}")
                 print(f"  Not Before: {not_before[:4]}-{not_before[4:6]}-{not_before[6:8]}")
                 print(f"  Not After : {not_after[:4]}-{not_after[4:6]}-{not_after[6:8]}")
                 
-                # Check expiration
+                
                 expiration_date = datetime.strptime(not_after, '%Y%m%d%H%M%SZ')
                 days_left = (expiration_date - datetime.now()).days
                 if days_left < 30:
@@ -842,20 +844,20 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                     color = Colors.OKGREEN
                 print(f"  Days Left : {color}{days_left}{Colors.ENDC}")
                 
-                # Signature algorithm
+              
                 print(f"\n{Colors.BOLD}Signature Algorithm:{Colors.ENDC} {x509.get_signature_algorithm().decode()}")
                 
-                # Check for common vulnerabilities
+              
                 print(f"\n{Colors.BOLD}Security Checks:{Colors.ENDC}")
                 
-                # Check for SHA-1 (insecure)
+               
                 sig_algo = x509.get_signature_algorithm().decode()
                 if 'sha1' in sig_algo.lower():
                     print(f"  {Colors.FAIL}Insecure: Certificate signed with SHA-1{Colors.ENDC}")
                 else:
                     print(f"  {Colors.OKGREEN}Secure: Certificate not signed with SHA-1{Colors.ENDC}")
                     
-                # Check key length
+                
                 pub_key = x509.get_pubkey()
                 bits = pub_key.bits()
                 if bits < 2048:
@@ -884,6 +886,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             print(f"{Colors.HEADER}Email Security Checks for {domain}{Colors.ENDC}")
             
             try:
+               
                 try:
                     answers = dns.resolver.resolve(domain, 'TXT')
                     spf_found = any('v=spf1' in rdata.to_text().lower() for rdata in answers)
@@ -896,7 +899,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 except Exception:
                     print(f"{Colors.WARNING}Could not check SPF record{Colors.ENDC}")
                     
-                # Check DKIM (this is domain-specific, common selectors)
+                
                 common_selectors = ['default', 'dkim', 'google', 'selector1', 'selector2']
                 dkim_found = False
                 for selector in common_selectors:
@@ -913,7 +916,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 if not dkim_found:
                     print(f"{Colors.FAIL}No DKIM records found for common selectors{Colors.ENDC}")
                     
-                # Check DMARC
+                
                 try:
                     answers = dns.resolver.resolve(f"_dmarc.{domain}", 'TXT')
                     dmarc_found = any('v=dmarc1' in rdata.to_text().lower() for rdata in answers)
@@ -926,7 +929,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 except Exception:
                     print(f"{Colors.WARNING}Could not check DMARC record{Colors.ENDC}")
                     
-                # Check MX records
+                
                 try:
                     answers = dns.resolver.resolve(domain, 'MX')
                     mx_records = [str(rdata.exchange) for rdata in answers]
@@ -967,16 +970,16 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 print(f"{Colors.BOLD}Server:{Colors.ENDC} {server}")
                 print(f"{Colors.BOLD}X-Powered-By:{Colors.ENDC} {powered_by}")
                 
-                # Check for common server vulnerabilities
+                
                 print(f"\n{Colors.BOLD}Security Notes:{Colors.ENDC}")
                 
-                # Server disclosure
+                
                 if server == 'NOT DISCLOSED' and powered_by == 'NOT DISCLOSED':
                     print(f"  {Colors.OKGREEN}Good: Server information not disclosed{Colors.ENDC}")
                 else:
                     print(f"  {Colors.WARNING}Note: Server information disclosed{Colors.ENDC}")
                     
-                # Check for outdated servers
+                
                 outdated = False
                 if 'Apache/2.2' in server:
                     print(f"  {Colors.FAIL}Critical: Outdated Apache version (2.2){Colors.ENDC}")
@@ -1022,7 +1025,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 
                 detected = []
                 
-                # Check from headers
+                
                 server = headers.get('Server', '')
                 powered_by = headers.get('X-Powered-By', '')
                 
@@ -1031,7 +1034,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 if powered_by:
                     detected.append(f"Powered By: {powered_by}")
                     
-                # Check for common frameworks in HTML
+             
                 framework_patterns = {
                     'WordPress': r'wp-content|wordpress',
                     'Joomla': r'joomla',
@@ -1051,7 +1054,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                     if re.search(pattern, html, re.IGNORECASE):
                         detected.append(name)
                         
-                # Check for common analytics
+             
                 analytics_patterns = {
                     'Google Analytics': r'google-analytics.com/ga.js',
                     'Google Tag Manager': r'googletagmanager.com/gtm.js',
@@ -1083,8 +1086,8 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             print(f"{Colors.HEADER}DNS Leak Test{Colors.ENDC}")
             
             try:
-                # Get DNS servers from system configuration
-                if os.name == 'nt':  # Windows
+         
+                if os.name == 'nt': 
                     import winreg
                     with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SYSTEM\CurrentControlSet\Services\Tcpip\Parameters") as key:
                         dns_servers = []
@@ -1109,7 +1112,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 for server in dns_servers:
                     print(f"  {server}")
                     
-                # Test which servers are actually being used
+            
                 test_domains = ['google.com', 'facebook.com', 'amazon.com', 'microsoft.com']
                 used_servers = set()
                 
@@ -1122,7 +1125,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                     except Exception as e:
                         print(f"  {Colors.WARNING}Could not resolve {domain}: {str(e)}{Colors.ENDC}")
                         
-                # Check for potential leaks
+             
                 print(f"\n{Colors.BOLD}Potential DNS Leak Detection:{Colors.ENDC}")
                 if len(dns_servers) > 2:
                     print(f"  {Colors.WARNING}Warning: Multiple DNS servers configured{Colors.ENDC}")
@@ -1141,8 +1144,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
         try:
             print(f"{Colors.HEADER}IP Leak Test{Colors.ENDC}")
             
-            try:
-                # Get public IP from multiple sources
+            try:            
                 services = [
                     'https://api.ipify.org',
                     'https://ident.me',
@@ -1166,7 +1168,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                     print(f"{Colors.FAIL}Could not determine public IP{Colors.ENDC}")
                     return
                     
-                # Check for consistency
+           
                 unique_ips = set(ips)
                 if len(unique_ips) > 1:
                     print(f"\n{Colors.FAIL}Warning: IP leak detected - different IPs reported{Colors.ENDC}")
@@ -1224,7 +1226,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             strength = 0
             feedback = []
             
-            # Length check
+      
             if len(password) >= 12:
                 strength += 2
                 feedback.append(f"{Colors.OKGREEN}✓ Good length (12+ characters){Colors.ENDC}")
@@ -1234,7 +1236,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             else:
                 feedback.append(f"{Colors.FAIL}✗ Too short (less than 8 characters){Colors.ENDC}")
                 
-            # Complexity checks
+       
             has_upper = any(c.isupper() for c in password)
             has_lower = any(c.islower() for c in password)
             has_digit = any(c.isdigit() for c in password)
@@ -1261,13 +1263,13 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
             else:
                 feedback.append(f"{Colors.WARNING}✗ No special characters{Colors.ENDC}")
                 
-            # Common password check
+      
             common_passwords = ['password', '123456', 'qwerty', 'letmein', 'welcome']
             if password.lower() in common_passwords:
                 strength = 0
                 feedback.append(f"{Colors.FAIL}✗ Extremely common password{Colors.ENDC}")
                 
-            # Sequential characters check
+       
             if any(password[i:i+3].isdigit() and 
                  int(password[i])+1 == int(password[i+1]) and 
                  int(password[i+1])+1 == int(password[i+2]) 
@@ -1275,12 +1277,12 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
                 strength -= 1
                 feedback.append(f"{Colors.WARNING}✗ Contains sequential characters{Colors.ENDC}")
                 
-            # Repeated characters check
+          
             if any(c * 3 in password for c in password):
                 strength -= 1
                 feedback.append(f"{Colors.WARNING}✗ Contains repeated characters{Colors.ENDC}")
                 
-            # Strength rating
+        
             strength = max(0, min(5, strength))
             strength_text = {
                 0: f"{Colors.FAIL}Very Weak{Colors.ENDC}",
@@ -1353,7 +1355,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
         
         while self.running:
             try:
-                command = input(f"starexx@root {Colors.OKGREEN}~{Colors.ENDC}${Colors.ENDC} ").strip()
+                command = input(f"{Colors.BOLD}{Colors.OKGREEN}⟩{Colors.ENDC}{Colors.ENDC} ").strip()
                 if not command:
                     continue
                     
@@ -1435,5 +1437,7 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
         print(f"{Colors.OKGREEN}Exiting...{Colors.ENDC}")
 
 if __name__ == "__main__":
+    tracker = StarexxTracker()
+    tracker.run()_main__":
     tracker = StarexxTracker()
     tracker.run()
