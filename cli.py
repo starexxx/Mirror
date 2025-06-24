@@ -1438,6 +1438,4 @@ Type '{Colors.WARNING}help{Colors.ENDC}' for available commands{Colors.ENDC}
 
 if __name__ == "__main__":
     tracker = StarexxTracker()
-    tracker.run()_main__":
-    tracker = StarexxTracker()
     tracker.run()
